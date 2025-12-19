@@ -2,23 +2,26 @@ import requests
 from PIL import Image
 import os
 from transformers import BlipProcessor, BlipForConditionalGeneration
-
 processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-large")
 model = BlipForConditionalGeneration.from_pretrained("Salesforce/blip-image-captioning-large")
-print(os.getcwd())
-img_url = '../datasets/1.png' 
-print(os.path.exists(img_url))
-raw_image = Image.open(img_url).convert('RGB')
 
-# conditional image captioning
-text = "a photography of"
-inputs = processor(raw_image, text, return_tensors="pt")
+def caption_image(img_url):
+    print(os.path.exists(img_url))
+    raw_image = Image.open(img_url).convert('RGB')
 
-out = model.generate(**inputs)
-print(processor.decode(out[0], skip_special_tokens=True))
+    # conditional image captioning
+    text = "a photography of"
+    inputs = processor(raw_image, text, return_tensors="pt")
 
-# unconditional image captioning
-inputs = processor(raw_image, return_tensors="pt")
+    out = model.generate(**inputs)
+    # unconditional image captioning
+    inputs = processor(raw_image, return_tensors="pt")
 
-out = model.generate(**inputs)
-print(processor.decode(out[0], skip_special_tokens=True))
+    out = model.generate(**inputs)
+    
+    return processor.decode(out[0], skip_special_tokens=True)
+
+if __name__=="__main__":
+    test_image_path = "../datasets/1.png"
+    caption = caption_image(test_image_path)
+    print("Generated Caption:", caption)
