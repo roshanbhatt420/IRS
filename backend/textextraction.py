@@ -1,6 +1,5 @@
 import base64
 import requests
-from preprocessing import process_image
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
 
@@ -21,4 +20,4 @@ def text_extraction(imaurl):
 
     response = requests.post(OLLAMA_URL, json=payload)
     result = response.json()
-    return result['generations'][0]['text']
+    return result
