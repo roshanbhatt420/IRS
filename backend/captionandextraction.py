@@ -5,7 +5,7 @@ from PIL.ExifTags import TAGS
 from datetime import datetime
 import concurrent.futures
 
-from textextraction import text_extraction
+from textextraction import ocr_image 
 from captioning import caption_image
 
 def process_image(file_path):
@@ -38,13 +38,13 @@ def  processing_parra(imgurl):
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
         # working on parallel process 
 
-        future_ocr=executor.submit(text_extraction, imgurl)
+        future_ocr=executor.submit(ocr_image, imgurl)
         future_caption=executor.submit(caption_image,imgurl)
-
         # wait for result come
         text_ocr=future_ocr.result()
-        text_caption=future_caption.result
-        context = f"Visual Description: {text_caption}. Text Content: {ocr_text}"
+        text_caption=future_caption.result()
+         # Combine results
+        context = f"Visual Description: {text_caption}. Text Content: {text_ocr}"
 
         return context
 
