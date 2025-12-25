@@ -10,7 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Ensure the 'data' folder exists to save uploaded images
+# Ensure the 'data' folder 
 if not os.path.exists("data"):
     os.makedirs("data")
 
@@ -21,7 +21,7 @@ st.markdown("""
 This system uses **OCR**, **Neural Image Captioning**, and **Vector Embeddings** to make your screenshots searchable.
 """)
 
-# --- TABS FOR NAVIGATION ---
+
 tab1, tab2 = st.tabs(["📤 Add to Brain", "🔍 Search Memory"])
 
 # ==========================================
@@ -31,7 +31,7 @@ with tab1:
     uploaded_file = st.file_uploader("Choose an image...", type=['png', 'jpg', 'jpeg'])
     
     if uploaded_file is not None:
-        # 1. Show the user what they uploaded
+        # 1. Show the user a preview of the uploaded image
         image = Image.open(uploaded_file)
         st.image(image, caption="Preview", width=300)
         
@@ -52,9 +52,8 @@ with tab1:
                 except Exception as e:
                     st.error(f"Error processing image: {e}")
 
-# ==========================================
+
 # TAB 2: SEARCH
-# ==========================================
 with tab2:
     st.header("Search your Knowledge Base")
     
