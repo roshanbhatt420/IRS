@@ -31,7 +31,7 @@ with tab1:
     uploaded_file = st.file_uploader("Choose an image...", type=['png', 'jpg', 'jpeg'])
     
     if uploaded_file is not None:
-        # 1. Show the user a preview of the uploaded image
+        # 1. Show the user 
         image = Image.open(uploaded_file)
         st.image(image, caption="Preview", width=300)
         
@@ -52,8 +52,9 @@ with tab1:
                 except Exception as e:
                     st.error(f"Error processing image: {e}")
 
-
+# ==========================================
 # TAB 2: SEARCH
+# ==========================================
 with tab2:
     st.header("Search your Knowledge Base")
     
