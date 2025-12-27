@@ -55,5 +55,18 @@ This project uses a **Dual-Path Processing Pipeline** to handle multi-modal data
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/yourusername/ai-second-brain.git
-cd ai-second-brain
+git clone https://github.com/roshanbhatt420/IRS.git
+cd IRS
+```
+### 2. Requirements Installation
+```bash
+pip install -r requirements.txt
+```
+### 4. Ollama
+''' bash
+olllama pull deepseek-ocr
+'''
+### 5. Run the Streamlit App
+```bash
+streamlit run IRS/frontend/app.py
+```
