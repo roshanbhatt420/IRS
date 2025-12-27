@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 from PIL import Image
-import backend  # Your backend logic
+import backend  
 import time
 
 # --- PAGE CONFIGURATION ---
@@ -24,9 +24,6 @@ This system uses **OCR**, **Neural Image Captioning**, and **Vector Embeddings**
 
 tab1, tab2 = st.tabs(["📤 Add to Brain", "🔍 Search Memory"])
 
-# ==========================================
-# TAB 1: INGESTION (Modified for Bulk)
-# ==========================================
 with tab1:
     st.header("Ingest Knowledge")
     
@@ -38,44 +35,43 @@ with tab1:
         uploaded_files = st.file_uploader(
             "Choose images...", 
             type=['png', 'jpg', 'jpeg'], 
-            accept_multiple_files=True  # <--- THIS ALLOWS SELECTING MANY FILES
+            accept_multiple_files=True  
         )
         
         if uploaded_files:
             st.write(f"Selected {len(uploaded_files)} images.")
             
             if st.button("🧠 Process All Images"):
-                # Progress Bar
+                
                 progress_bar = st.progress(0)
                 status_text = st.empty()
                 
                 for i, uploaded_file in enumerate(uploaded_files):
-                    # 1. Save file locally
+                    
                     file_path = os.path.join("data", uploaded_file.name)
                     with open(file_path, "wb") as f:
                         f.write(uploaded_file.getbuffer())
-                    
-                    # 2. Update Status
+                  
                     status_text.text(f"Processing {i+1}/{len(uploaded_files)}: {uploaded_file.name}...")
                     
-                    # 3. Call Backend
+                  
                     try:
                         backend.ingest_screenshot(file_path)
                     except Exception as e:
                         st.error(f"Failed on {uploaded_file.name}: {e}")
                     
-                    # 4. Update Progress
+                 
                     progress_bar.progress((i + 1) / len(uploaded_files))
                 
                 status_text.success("✅ Batch processing complete!")
 
-    # --- METHOD B: LOCAL FOLDER PATH (For huge datasets) ---
+   
     elif ingest_type == "💻 Scan Local Folder Path":
         st.info("Paste the absolute path to a folder on your computer containing images.")
         folder_path = st.text_input("Folder Path", placeholder="C:/Users/Name/Pictures/Screenshots")
         
         if folder_path and os.path.isdir(folder_path):
-            # Find all images in that folder
+           
             valid_extensions = ('.png', '.jpg', '.jpeg', '.JPG', '.PNG')
             image_files = [f for f in os.listdir(folder_path) if f.endswith(valid_extensions)]
             
@@ -88,7 +84,7 @@ with tab1:
                 for i, filename in enumerate(image_files):
                     full_path = os.path.join(folder_path, filename)
                     
-                    # Update Status
+                    
                     status_text.text(f"Processing {i+1}/{len(image_files)}: {filename}...")
                     
                     try:
@@ -102,9 +98,7 @@ with tab1:
         elif folder_path:
             st.error("That path does not exist on this computer.")
 
-# ==========================================
-# TAB 2: SEARCH (Unchanged)
-# ==========================================
+
 with tab2:
     st.header("Search your Knowledge Base")
     
@@ -112,7 +106,7 @@ with tab2:
     with col1:
         query = st.text_input("What are you looking for?", placeholder="e.g., 'Receipt for sushi'")
     with col2:
-        # Simple date filter toggle
+      
         filter_date = st.date_input("Date", value=None)
         use_date_filter = st.checkbox("Filter by Date")
     
@@ -126,7 +120,7 @@ with tab2:
                 if not results['ids'][0]:
                     st.warning("No matches found.")
                 else:
-                    # Display Loop
+                    
                     num_results = len(results['ids'][0])
                     for i in range(num_results):
                         file_path = results['ids'][0][i]

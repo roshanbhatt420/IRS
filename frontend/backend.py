@@ -37,9 +37,16 @@ def image_to_base64(path):
 
     Returns:
         _type_: _description_
+
     """
-    with open(path, "rb") as f:
-        return base64.b64encode(f.read()).decode("utf-8")
+    if not os.path.exists(path):
+        raise FileNotFoundError("No such file ")
+    try:
+        with open(path, "rb") as f:
+            encoded= base64.b64encode(f.read()).decode("utf-8")
+            return encoded
+    except Exception  as e:
+        raise  RuntimeError(f"Error in encoding {e}")
 
 def process_image(file_path):
     """_summary_
@@ -63,43 +70,41 @@ def process_image(file_path):
         
     return image, {"date": creation_time, "path": file_path}
 
+
 def extract_text_ollama(image_path):
-    """_summary_
-
-    Args:
-        image_path (_type_): _description_
-
-    Returns:
-        _type_: _description_
+    """
+    Extracts text and structure from an image using Ollama.
     """
     image_b64 = image_to_base64(image_path)
+    print("Sending image to Ollama for OCR...")
 
-    # REFINED PROMPT: Focus on Layout and Text, let BLIP handle general "Vibe"
     prompt = (
-        "Analyze this image as an OCR engine.\n"
-        "1. Extract all visible text exactly as it appears.\n"
-        "2. If it is code, preserve indentation.\n"
-        "3. Descibe the image with all possible visuals details.\n"
-        "4.Describe the scene, objects, text, colors, and layout, whether it is bill, report , screenshots, code error meme etc.\n"
-        "5. If it is a receipt/table, output it in a structured format.\n"
-        "6. Do  describe the colors or artistic style,  focus on the content and text.\n"
-        "Output plain text only."
-    )
-
-    payload = {
-        "model": OLLAMA_MODEL, 
-        "prompt": prompt,
+    "Descibes the image "    )
+    payload={
+        "model":OLLAMA_MODEL,
+        "prompt":prompt,
         "images": [image_b64],
-        "stream": False
-    }
+        "stream": False,
+                  }
 
     try:
-        response = requests.post(OLLAMA_URL, json=payload)
+        response = requests.post(
+            OLLAMA_URL,
+            json=payload,
+        )
         response.raise_for_status()
-        return response.json()["response"]
+        print("Ollama response received.")
+
+
+
+        data = response.json()
+        return data.get("response", "[No OCR text returned]")
+
     except Exception as e:
         print(f"Ollama Error: {e}")
+        
         return "[Ollama Failed to Read Text]"
+
 
 def generate_caption(image):
     """_summary_
@@ -172,8 +177,15 @@ def search_brain(query_text, date_filter=None):
 
     results = collection.query(
         query_embeddings=[query_vector],
+        n_results=3,
         where=where_clause
     )
     
     return results
 
+if __name__ == "__main__":
+    # Example usage
+    test_image_path = "../datasets/1.png"  # Replace with your test image path
+    print(ingest_screenshot(test_image_path))
+    
+   
