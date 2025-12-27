@@ -15,14 +15,14 @@ A **Multi-Modal Retrieval** system that transforms a folder of unstructured scre
 
 ### 1. The Dashboard
 *Upload single files or scan entire directories in bulk.*
-![Dashboard Interface](/IRS/assests/screenshot05.png)
-![Dashboard Interface 2](/IRS/assets/screenshot03.png)
-![Dashboard Interface 3](/IRS/assets/screenshot04.png)
+![Dashboard Interface](../assests/screenshot05.png)
+![Dashboard Interface 2](../assets/screenshot03.png)
+![Dashboard Interface 3](/assets/screenshot04.png)
 
 ### 2. Semantic Search in Action
 *Searching for "Sushi receipt" finds the image even if the word "Sushi" isn't explicitly written, thanks to visual understanding.*
-![Search Demo](/IRS/assets/screenshot01.png)
-![Search Demo 2](assets/screenshot02.png)
+![Search Demo](../assets/screenshot01.png)
+![Search Demo 2](../assets/screenshot02.png)
 
 ---
 
